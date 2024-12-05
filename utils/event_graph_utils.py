@@ -47,12 +47,12 @@ def eg_event_generation_set(df, mp_set, window_size, cluster_size):
     for col_name in df.columns:
         key = '{} Profile'.format(col_name)
         index = [item['motifs'] for item in mp_set[key]['motifs']]                
-        motifs[col_name] = list(set(sum(index, [])))                    # 중복 index 제외
+        motifs[col_name] = list(set(sum(index, [])))                    # exclude duplicate indices
 
     patterns = []
     for col_name in df.columns:
         patterns.append([df[col_name].values[idx : idx + window_size] for idx in motifs[col_name]])
-    patterns = list({tuple(array) for array in sum(patterns, [])})      # 중복 제외
+    patterns = list({tuple(array) for array in sum(patterns, [])})      # exclude duplicate
     patterns = [np.array(array) for array in patterns]
 
 
