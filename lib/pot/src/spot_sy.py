@@ -39,7 +39,7 @@ def spot_sy(data:np.array, num_init:int, risk:float, init_level):
             gamma, sigma = grimshaw(peaks=peaks, threshold=t)
             k = k + 1
             r = k * risk / peaks.size
-            if gamma == 0 or r <= 0 or sigma < 0:    # 계산 오류 방지하기 위해서,,
+            if gamma == 0 or r <= 0 or sigma < 0:    # to avoid calculation errors
                 z = t
             else:
                 z = t + (sigma / gamma) * (pow(r, -gamma) - 1)
