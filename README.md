@@ -1,5 +1,6 @@
 # Dynamic Periodic Event Bipartite Graph
 paper : Dynamic Periodic Event Bipartite Graphs for Multivariate Time Series Pattern Prediction  
+[![DOI](https://zenodo.org/badge/789309688.svg)](https://doi.org/10.5281/zenodo.14280464)
 
 ![methodology](./figures/figure_methodology.jpg)
 
