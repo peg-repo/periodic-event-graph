@@ -40,26 +40,26 @@ def dtw_distance_matrix(time_series_list):
     for i in range(num_series):
         for j in range(i, num_series):
             distance_matrix[i, j] = dtw_distance(time_series_list[i], time_series_list[j])
-            distance_matrix[j, i] = distance_matrix[i, j]  # 대칭 행렬
+            distance_matrix[j, i] = distance_matrix[i, j]  # symmetric matrix
             
     return distance_matrix
 
 def event_generation_set(data_dict, mp_set, dict, periods, cluster_size):
-    # 패딩하여 2차원 배열 생성
+    # create a 2D array with padding
     motifs = {}
     for col_name in data_dict.keys():
         key = '{} Profile'.format(col_name)
         index = [item['motifs'] for item in mp_set[key]['motifs']]                
-        motifs[col_name] = list(set(sum(index, [])))                    # 중복 index 제외
+        motifs[col_name] = list(set(sum(index, [])))                    # exclude duplicate indices
 
     patterns = []
     for col_name in data_dict.keys():
         window_size = periods * dict[col_name]
         patterns.append([data_dict[col_name][idx : idx + window_size] for idx in motifs[col_name]])
-    patterns = list({tuple(array) for array in sum(patterns, [])})      # 중복 제외
+    patterns = list({tuple(array) for array in sum(patterns, [])})      # exclude duplicate
     patterns = [np.array(array) for array in patterns]
 
-    # 패딩하여 2차원 배열 생성
+    # create a 2D array with padding
     max_length = max(len(pattern) for pattern in patterns)
     padded_patterns = np.array([np.pad(pattern, (0, max_length - len(pattern)), mode='constant') for pattern in patterns])
 
@@ -107,7 +107,7 @@ def pattern_matching_df(window_df, event_set):
         for col_name in window_df.columns:
             ts_similarity = []
             for event in event_set.values():
-                # 길이가 다른 경우 패딩을 적용하여 길이를 맞춰줌
+                # Apply padding to adjust lengths when they differ
                 if len(sliding_window[col_name]) < len(event):
                     padded_window = np.pad(sliding_window[col_name], (0, len(event) - len(sliding_window[col_name])), 'constant')
                     ts_similarity.append(mass2_sy(padded_window, event))
@@ -172,7 +172,7 @@ def event2graph_not_df(pattern_df, pattrn_event_set):
     graph_df = pd.melt(pattern_matching_mapped.reset_index(), id_vars = ['index'], var_name = 'u', value_name = 'i').rename(columns={'index': 'ts'})
  
     graph_df = graph_df.reset_index()
-    graph_df['label'] = 0.0  #state level
+    graph_df['label'] = 0.0  # state level
     graph_df = graph_df[['u', 'i', 'ts', 'label']]
     graph_df['u'] = graph_df['u'].map(timeseries_mapping)   # appiance mapping
 
@@ -219,7 +219,7 @@ def fft_estimate_period(data):
     dominant_freq = fft_freq[dominant_freq_index]
 
     if dominant_freq_index > 0:
-        period_length = int(1 / abs(dominant_freq))  # 상수로 취급
+        period_length = int(1 / abs(dominant_freq))  # treat as a constant
         return period_length
     else:
         return None 
