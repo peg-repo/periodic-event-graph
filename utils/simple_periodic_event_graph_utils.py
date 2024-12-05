@@ -21,7 +21,7 @@ def extract_residual_windows_df(window_df, event_set, pattern_matching_df):
     for col_name in residual_windows_df.columns:
         for i in residual_windows_df.index:
             event_key = pattern_matching_df[col_name][i]
-            # 길이가 다른 경우 패딩을 적용하여 길이를 맞춰줌
+            # Apply padding to adjust lengths when they differ
             if len(window_df[col_name][i]) < len(event_set[event_key]):
                 padded_window = np.pad(window_df[col_name][i], (0, len(event_set[event_key]) - len(window_df[col_name][i])), 'constant')
                 residual_windows_df[col_name][i] = padded_window - event_set[event_key]
